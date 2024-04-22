@@ -1,14 +1,14 @@
-use std::process;
+use crate::generate_gitignore::generate::*;
 use crate::search_gitignore::search::*;
-use  crate::generate_gitignore::generate::*;
+use std::fs::{self, File};
+use std::path::Path;
+use std::process;
 
 use clap::Parser;
 
-mod search_gitignore;
 mod generate_gitignore;
+mod search_gitignore;
 mod utils;
-
-
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -25,28 +25,26 @@ async fn main() {
 
     let is_manual = args.manual;
 
+    if Path::new(".gitignore").exists() {
+        println!("a .gitignore already exists in the current directory");
+        process::exit(1);
+    }
+
     if !is_manual {
-        match args.lang {
-            Some(language) => {
-                let search_result = search_for_gitignore(language).await;
-                match search_result {
-                    Ok(_) => println!("gitignore generated in root directory"),
-                    Err(e) => {
-                        eprintln!("{e}");
-
-                        process::exit(1);
-
-                    }
-                }
-
-            }
-            None => {
-                eprint!("A language was not provided");
-                process::exit(1);
-            }
+        if let None = args.lang {
+            eprint!("A language was not provided");
+            process::exit(1);
         }
-        return;
+        println!("Getting your gitignore ...");
+
+        let search_result = search_for_gitignore(args.lang.unwrap()).await;
+
+        if let Err(error) = search_result {
+            eprintln!("an error ocurred, details: {error}");
+            process::exit(1);
+        }
+        println!(".gitignore generated in root dir");
+        process::exit(0)
     }
     generate_gitignore_manually();
 }
-
