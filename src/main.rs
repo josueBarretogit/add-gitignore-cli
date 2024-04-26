@@ -1,5 +1,5 @@
-use crate::generate_gitignore::generate::*;
 use crate::search_gitignore::search::*;
+use crate::utils::*;
 use std::path::Path;
 use std::process;
 
@@ -11,7 +11,15 @@ mod utils;
 
 #[tokio::main]
 async fn main() {
-    let lang_options = vec!["Rust", "Node", "Go", "Dart", "Java", "C", "Javascript"];
+    let lang_options: Vec<&str> = vec![
+        "Rust", "Node", "Go", "Dart", "Java", "C", "C++", "python", "ruby", "lua", "Swift", "Ruby",
+        "Haskell", "oCaml",
+    ];
+
+    let lang_options: Vec<String> = lang_options
+        .iter()
+        .map(|word| capitalize_first_letter(word))
+        .collect();
 
     if Path::new(".gitignore").exists() {
         let answer = Confirm::new("There is a .gitignore already, Do you want to overwrite it?")
@@ -25,8 +33,10 @@ async fn main() {
                 process::exit(0)
             }
             Err(e) => {
-                eprint!("There was an error, more details: {}", e);
-                process::exit(1)
+                if let Err(err) = validate_response(&e) {
+                    eprint!("There was an error: more detailes: {err}");
+                    process::exit(1)
+                }
             }
         }
     }
@@ -37,8 +47,11 @@ async fn main() {
     {
         Ok(choice) => choice,
         Err(err) => {
-            eprint!("There was an error, more details: {err}");
-            process::exit(1)
+            if let Err(err) = validate_response(&err) {
+                eprint!("There was an error: more detailes: {err}");
+                process::exit(1);
+            }
+            "".into()
         }
     };
 
@@ -50,6 +63,7 @@ async fn main() {
         eprintln!("an error ocurred, details: {error}");
         process::exit(1);
     }
+
     println!(".gitignore generated in root dir");
     process::exit(0)
 }

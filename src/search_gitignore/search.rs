@@ -45,7 +45,6 @@ pub async fn search_for_gitignore(lang: String) -> Result<(), AnyError> {
 
     let endpoint_gitignore = Url::parse(GITHUB_REPO_URL)?.join(&lang_to_search)?;
 
-    println!("{endpoint_gitignore}");
 
     let contents = get_gitignore_contents(endpoint_gitignore).await?;
 
