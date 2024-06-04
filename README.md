@@ -18,11 +18,12 @@ Simply type in your terminal:
 
 ```bash 
     add-gitignore-cli
+    #or whatever you alias it
 ```
 
 Select the language you want a .gitignore for
 
-![image](https://github.com/josueBarretogit/add-gitignore-cli/assets/144196149/8f370841-75b4-4fe9-bcb7-aea362f1fc44)
+![demo](https://github.com/josueBarretogit/add-gitignore-cli/assets/144196149/c3388e0a-95e3-4812-8dfc-89177bf8b336)
 
 
 and a .gitignore will be generated in your repo's root
