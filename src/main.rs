@@ -11,7 +11,7 @@ mod utils;
 
 #[tokio::main]
 async fn main() {
-    let lang_options: Vec<&str> = vec![
+    let lang_options  = [
         "Rust", "Node", "Go", "Dart", "Java", "C", "C++", "python", "ruby", "lua", "Swift", "Ruby",
         "Haskell", "oCaml",
     ];

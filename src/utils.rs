@@ -9,11 +9,9 @@ pub fn capitalize_first_letter(word: &str) -> String {
 
     let capitalized_first_letter = first_letter.to_uppercase().to_string();
 
-    let new_word = word
+    word
         .replace(first_letter, &capitalized_first_letter)
-        .to_owned();
-
-    new_word
+        .to_owned()
 }
 
 ///This is simple because when the user wants to cancel the operation it doesnt display as an arror
